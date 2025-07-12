@@ -8,6 +8,7 @@ on:
 env:
   DOCKER_IMAGE: ranmarkovich/devops-backend-app
   DOCKER_REGISTRY: docker.io
+  CONTEXT_PATH: ./backend
 
 jobs:
   build-and-test:
@@ -44,7 +45,7 @@ jobs:
     - name: Build Docker image
       uses: docker/build-push-action@v5
       with:
-        context: ./backend
+        context: ${{ env.CONTEXT_PATH }}
         load: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
@@ -86,7 +87,7 @@ jobs:
     - name: Push Docker image to Docker Hub
       uses: docker/build-push-action@v5
       with:
-        context: .
+        context: ${{ env.CONTEXT_PATH }}
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
