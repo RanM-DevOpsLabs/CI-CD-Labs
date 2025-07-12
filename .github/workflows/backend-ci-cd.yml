@@ -60,7 +60,7 @@ jobs:
     - name: Run Docker container for testing
       run: |
         # Get the first tag from the metadata output
-        IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
+        IMAGE_TAG=$(echo "${{ inputs.tags }}" | head -n1)
         echo "Running container with image: $IMAGE_TAG"
         
         # Start the container in detached mode
