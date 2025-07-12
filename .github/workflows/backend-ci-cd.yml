@@ -44,7 +44,7 @@ jobs:
     - name: Build Docker image
       uses: docker/build-push-action@v5
       with:
-        context: https://github.com/RanMarkovich/DevOps-Playground/tree/${{ steps.checkout.outputs.ref }}/backend
+        context: ./backend
         load: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
