@@ -15,6 +15,7 @@ jobs:
     
     steps:
     - name: Checkout remote repository
+      id: checkout
       uses: actions/checkout@v4
       with:
         repository: RanMarkovich/DevOps-Playground
@@ -43,7 +44,7 @@ jobs:
     - name: Build Docker image
       uses: docker/build-push-action@v5
       with:
-        context: .
+        context: https://github.com/RanMarkovich/DevOps-Playground/tree/${{ steps.checkout.outputs.ref }}/backend
         load: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
