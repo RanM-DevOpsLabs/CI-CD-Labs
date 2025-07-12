@@ -1,9 +1,14 @@
 name: Backend CI/CD Pipeline
 
 on:
-  push:
-    branches: [ main, develop ]
-    tags: [ 'v*' ]
+  workflow_call:
+    inputs:
+      tags:
+        required: true
+        type: string
+      labels:
+        required: true
+        type: string
 
 env:
   DOCKER_IMAGE: ranmarkovich/devops-backend-app
@@ -47,8 +52,8 @@ jobs:
       with:
         context: ${{ env.CONTEXT_PATH }}
         load: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+        tags: ${{ inputs.tags }}
+        labels: ${{ inputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
     
@@ -89,15 +94,15 @@ jobs:
       with:
         context: ${{ env.CONTEXT_PATH }}
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+        tags: ${{ inputs.tags }}
+        labels: ${{ inputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
     
     - name: Output image details
       run: |
         echo "🐳 Docker images pushed:"
-        echo "${{ steps.meta.outputs.tags }}" | sed 's/^/  - /'
+        echo "${{ inputs.tags }}" | sed 's/^/  - /'
         echo ""
         echo "📋 Labels:"
-        echo "${{ steps.meta.outputs.labels }}" | sed 's/^/  - /'
+        echo "${{ inputs.labels }}" | sed 's/^/  - /'
