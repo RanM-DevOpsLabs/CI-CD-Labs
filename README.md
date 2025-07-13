@@ -65,6 +65,9 @@ This workflow is designed to be called from external repositories. Here's how it
 4. **CI/CD Execution**: This workflow builds, tests, and pushes the Docker image
 5. **Concurrency Control**: Ensures only one build runs per branch/ref at a time
 
+### High Level Diagram of the Workflow
+![diagram](diagram.png)
+
 ## Configuration
 
 ### Environment Variables
