@@ -52,7 +52,7 @@ This workflow is designed to be called from external repositories. Here's how it
 **Repository**: [`RanMarkovich/DevOps-Playground`](https://github.com/RanMarkovich/DevOps-Playground)  
 **Trigger File**: `.github/workflows/trigger_remote_ci_cd.yml`
 
-
+![pipeline](pipeline.png)
 
 ### How It Works
 
