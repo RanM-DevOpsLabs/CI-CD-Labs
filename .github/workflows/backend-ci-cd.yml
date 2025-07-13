@@ -9,6 +9,11 @@ on:
       labels:
         required: true
         type: string
+    secrets:
+      DOCKER_USERNAME:
+        required: true
+      DOCKER_PASSWORD:
+        required: true
 
 env:
   DOCKER_REGISTRY: docker.io
