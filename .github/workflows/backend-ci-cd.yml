@@ -20,7 +20,7 @@ env:
   CONTEXT_PATH: ./backend
 
 jobs:
-  build-and-test:
+  build-test-and-push:
     runs-on: ubuntu-latest
     
     steps:
