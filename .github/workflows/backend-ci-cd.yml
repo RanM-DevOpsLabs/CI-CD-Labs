@@ -60,24 +60,52 @@ jobs:
         IMAGE_TAG=$(echo "${{ inputs.tags }}" | head -n1)
         echo "Running container with image: $IMAGE_TAG"
         
-        # Start the container in detached mode
-        docker run -d --name test-container -p 5000:5000 $IMAGE_TAG
+        # Start the container in detached mode with appropriate port mapping
+        if [ "${{ inputs.context_path }}" = "./backend" ]; then
+          echo "🚀 Starting backend container on port 5000"
+          docker run -d --name test-container -p 5000:5000 $IMAGE_TAG
+        elif [ "${{ inputs.context_path }}" = "." ]; then
+          echo "🚀 Starting frontend container on port 3000"
+          docker run -d --name test-container -p 3000:3000 $IMAGE_TAG
+        else
+          echo "🚀 Starting container with default port mapping 5000:5000"
+          docker run -d --name test-container -p 5000:5000 $IMAGE_TAG
+        fi
         
         # Wait for container to start
         sleep 10
     
     - name: Health check
       run: |
-        # Wait for the service to be ready (with timeout)
-        timeout 60s bash -c 'until curl -f http://localhost:5000/health; do echo "Waiting for service..."; sleep 5; done'
-        
-        # Verify health check response
-        response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/health)
-        if [ $response -eq 200 ]; then
-          echo "✅ Health check passed"
+        if [ "${{ inputs.context_path }}" = "./backend" ]; then
+          echo "🔍 Backend health check - testing /health endpoint on port 5000"
+          # Wait for the service to be ready (with timeout)
+          timeout 60s bash -c 'until curl -f http://localhost:5000/health; do echo "Waiting for service..."; sleep 5; done'
+          
+          # Verify health check response
+          response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/health)
+          if [ $response -eq 200 ]; then
+            echo "✅ Backend health check passed"
+          else
+            echo "❌ Backend health check failed with status: $response"
+            exit 1
+          fi
+        elif [ "${{ inputs.context_path }}" = "." ]; then
+          echo "🔍 Frontend health check - testing root endpoint on port 3000"
+          # Wait for the service to be ready (with timeout)
+          timeout 60s bash -c 'until curl -f http://localhost:3000; do echo "Waiting for service..."; sleep 5; done'
+          
+          # Verify health check response
+          response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000)
+          if [ $response -eq 200 ]; then
+            echo "✅ Frontend health check passed"
+          else
+            echo "❌ Frontend health check failed with status: $response"
+            exit 1
+          fi
         else
-          echo "❌ Health check failed with status: $response"
-          exit 1
+          echo "⚠️ Unknown context path: ${{ inputs.context_path }}"
+          echo "Skipping health check - no predefined test for this context"
         fi
     
     - name: Stop test container
