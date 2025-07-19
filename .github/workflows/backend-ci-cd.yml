@@ -9,6 +9,9 @@ on:
       labels:
         required: true
         type: string
+      context_path:
+        required: true
+        type: string
     secrets:
       DOCKER_USERNAME:
         required: true
@@ -17,7 +20,7 @@ on:
 
 env:
   DOCKER_REGISTRY: docker.io
-  CONTEXT_PATH: ./backend
+  CONTEXT_PATH: ${{ inputs.context_path }}
 
 jobs:
   build-test-and-push:
@@ -58,7 +61,7 @@ jobs:
         echo "Running container with image: $IMAGE_TAG"
         
         # Start the container in detached mode
-        docker run -d --name backend-test -p 5000:5000 $IMAGE_TAG
+        docker run -d --name test-container -p 5000:5000 $IMAGE_TAG
         
         # Wait for container to start
         sleep 10
