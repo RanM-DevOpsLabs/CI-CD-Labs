@@ -64,6 +64,7 @@ This workflow is designed to be called from external repositories. Here's how it
 3. **Remote Workflow Call**: The metadata is passed to this reusable workflow
 4. **CI/CD Execution**: This workflow builds, tests, and pushes the Docker image
 5. **Concurrency Control**: Ensures only one build runs per branch/ref at a time
+6. **Matrix**: Running Backend and Frontent workflows in a matrix fasihon - parallely and independantly 
 
 ### High Level Diagram of the Workflow
 ![diagram](diagram.png)
