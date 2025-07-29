@@ -12,6 +12,10 @@ on:
       context_path:
         required: true
         type: string
+      build_args:
+        required: false
+        type: string
+        default: ""
     secrets:
       DOCKER_USERNAME:
         required: true
@@ -51,6 +55,7 @@ jobs:
         load: true
         tags: ${{ inputs.tags }}
         labels: ${{ inputs.labels }}
+        build-args: ${{ inputs.build_args }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
     
